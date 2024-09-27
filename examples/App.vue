@@ -43,7 +43,7 @@ import { FEATURES, FEATURE_ALL_NAMES } from '../src/features.js';
 const request = {
   // ----- CHANGE ME! -----
   // [REQUIRED] Url for development server endpoint
-  baseUrl: "http://vuefinder.ozdemir.be.test/vuefinder",
+  baseUrl: "http://localhost:8084",
   // ----- CHANGE ME! -----
 
   // Additional headers & params & body

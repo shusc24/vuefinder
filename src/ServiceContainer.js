@@ -31,64 +31,66 @@ export default (props, options) => {
 
     const path = persist ? storage.getStore('path', props.path) : props.path;
 
+    const dragSelect = useDragSelect();
+
     return reactive({
-        /** 
-        * Core properties
-        * */
+      /**
+       * Core properties
+       * */
 
-        // app version
-        version: version,
-        // root element
-        root: null,
-        // app id
-        debug: props.debug,
-        // Event Bus
-        emitter: emitter,
-        // storage
-        storage: storage,
-        // localization object
-        i18n: useI18n(storage, initialLang, emitter, supportedLocales),
-        // modal state
-        modal: useModal(),
-        // dragSelect object, it is responsible for selecting items
-        dragSelect: computed(() => useDragSelect()),
-        // http object
-        requester : buildRequester(props.request),
-        // active features
-        features: setFeatures(props.features),
-        // view state
-        view: storage.getStore('viewport', 'grid'),
-        // fullscreen state
-        fullScreen: storage.getStore('full-screen', props.fullScreen),
-        // show tree view
-        showTreeView: storage.getStore('show-tree-view', props.showTreeView),
-        // pinnedFolders
-        pinnedFolders: storage.getStore('pinned-folders', props.pinnedFolders),
-        // treeViewData
-        treeViewData: [],
-        // selectButton state
-        selectButton: props.selectButton,
-        // max file size
-        maxFileSize: props.maxFileSize,
+      // app version
+      version: version,
+      // root element
+      root: null,
+      // app id
+      debug: props.debug,
+      // Event Bus
+      emitter: emitter,
+      // storage
+      storage: storage,
+      // localization object
+      i18n: useI18n(storage, initialLang, emitter, supportedLocales),
+      // modal state
+      modal: useModal(),
+      // dragSelect object, it is responsible for selecting items
+      dragSelect: computed(() => dragSelect),
+      // http object
+      requester: buildRequester(props.request),
+      // active features
+      features: setFeatures(props.features),
+      // view state
+      view: storage.getStore("viewport", "grid"),
+      // fullscreen state
+      fullScreen: storage.getStore("full-screen", props.fullScreen),
+      // show tree view
+      showTreeView: storage.getStore("show-tree-view", props.showTreeView),
+      // pinnedFolders
+      pinnedFolders: storage.getStore("pinned-folders", props.pinnedFolders),
+      // treeViewData
+      treeViewData: [],
+      // selectButton state 
+      selectButton: props.selectButton,
+      // max file size
+      maxFileSize: props.maxFileSize,
 
-        /**
-        * Settings
-        * */
+      /**
+       * Settings
+       * */
 
-        // theme state
-        theme: theme,
-        // unit state - for example: GB or GiB
-        metricUnits: metricUnits,
-        // human readable file sizes
-        filesize: metricUnits ? filesizeMetric : filesizeDefault,
-        // show large icons in list view
-        compactListView: storage.getStore('compact-list-view', true),
-        // persist state
-        persist: persist,
-        // show thumbnails
-        showThumbnails: storage.getStore('show-thumbnails', props.showThumbnails),
+      // theme state
+      theme: theme,
+      // unit state - for example: GB or GiB
+      metricUnits: metricUnits,
+      // human readable file sizes
+      filesize: metricUnits ? filesizeMetric : filesizeDefault,
+      // show large icons in list view
+      compactListView: storage.getStore("compact-list-view", true),
+      // persist state
+      persist: persist,
+      // show thumbnails
+      showThumbnails: storage.getStore("show-thumbnails", props.showThumbnails),
 
-        // file system
-        fs: useData(adapter, path),
+      // file system
+      fs: useData(adapter, path),
     });
 }
