@@ -11,7 +11,7 @@
     <br>
     <br>
     <div style="font-weight: bold;padding: 10px">External select example</div>
-    <vue-finder id='my_vuefinder2' :request="request" :max-file-size="maxFileSize" :features="features"
+    <vue-finder :simple="false" id='my_vuefinder2' :request="request" :max-file-size="maxFileSize" :features="features"
       @select="handleSelect" />
 
     <button class="btn" @click="handleButton" :disabled="!selectedFiles.length">Show Selected ({{ selectedFiles.length

@@ -4,13 +4,17 @@
       <div :class="app.fullScreen ? 'vuefinder__main__fixed' : 'vuefinder__main__relative'"
         :style="!app.fullScreen ? 'max-height: ' + maxHeight : ''" class="vuefinder__main__container"
         @mousedown="app.emitter.emit('vf-contextmenu-hide')" @touchstart="app.emitter.emit('vf-contextmenu-hide')">
-        <Toolbar />
-        <Breadcrumb />
+        <template v-if="!simple">
+          <Toolbar />
+          <Breadcrumb />
+        </template>
         <div class="vuefinder__main__content">
           <TreeView />
           <Explorer />
         </div>
-        <Statusbar />
+        <template v-if="!simple">
+          <Statusbar />
+        </template>
       </div>
 
       <Transition name="fade">
@@ -97,6 +101,10 @@ const props = defineProps({
   showThumbnails: {
     type: Boolean,
     default: true
+  },
+  simple: {
+    type: Boolean,
+    default: true,
   },
   selectButton: {
     type: Object,
