@@ -1,10 +1,9 @@
 <template>
-  <ul ref="contextmenu" v-show="context.active" :style="context.positions"
-      class="vuefinder__context-menu">
+  <ul ref="contextmenu" v-show="context.active" :style="context.positions" class="vuefinder__context-menu">
     <li class="vuefinder__context-menu__item" v-for="(item) in filteredItems" :key="item.title">
       <template v-if="item.link">
         <a class="vuefinder__context-menu__link" target="_blank" :href="item.link" :download="item.link"
-           @click="app.emitter.emit('vf-contextmenu-hide')">
+          @click="app.emitter.emit('vf-contextmenu-hide')">
           <span>{{ item.title() }}</span>
         </a>
       </template>
@@ -18,8 +17,8 @@
 </template>
 
 <script setup>
-import {computed, inject, nextTick, reactive, ref} from 'vue';
-import {FEATURES} from "../features.js";
+import { computed, inject, nextTick, reactive, ref } from 'vue';
+import { FEATURES } from "../features.js";
 import ModalNewFolder from "./modals/ModalNewFolder.vue";
 import ModalPreview from "./modals/ModalPreview.vue";
 import ModalArchive from "./modals/ModalArchive.vue";
@@ -28,7 +27,7 @@ import ModalRename from "./modals/ModalRename.vue";
 import ModalDelete from "./modals/ModalDelete.vue";
 
 const app = inject('ServiceContainer');
-const {t} = app.i18n
+const { t } = app.i18n
 
 const contextmenu = ref(null);
 const selectedItems = ref([]);
@@ -64,35 +63,35 @@ const menuItems = {
   pinFolder: {
     title: () => t('Pin Folder'),
     action: () => {
-        app.pinnedFolders = app.pinnedFolders.concat(selectedItems.value);
-        app.storage.setStore('pinned-folders', app.pinnedFolders);
+      app.pinnedFolders = app.pinnedFolders.concat(selectedItems.value);
+      app.storage.setStore('pinned-folders', app.pinnedFolders);
     },
   },
 
   unpinFolder: {
     title: () => t('Unpin Folder'),
     action: () => {
-        app.pinnedFolders = app.pinnedFolders.filter(fav => !selectedItems.value.find(item => item.path === fav.path));
-        app.storage.setStore('pinned-folders', app.pinnedFolders);
+      app.pinnedFolders = app.pinnedFolders.filter(fav => !selectedItems.value.find(item => item.path === fav.path));
+      app.storage.setStore('pinned-folders', app.pinnedFolders);
     },
   },
   delete: {
     key: FEATURES.DELETE,
     title: () => t('Delete'),
     action: () => {
-      app.modal.open(ModalDelete, {items: selectedItems});
+      app.modal.open(ModalDelete, { items: selectedItems });
     },
   },
   refresh: {
     title: () => t('Refresh'),
     action: () => {
-      app.emitter.emit('vf-fetch', {params: {q: 'index', adapter: app.fs.adapter, path: app.fs.data.dirname}});
+      app.emitter.emit('vf-fetch', { params: { q: 'index', adapter: app.fs.adapter, path: app.fs.data.dirname } });
     },
   },
   preview: {
     key: FEATURES.PREVIEW,
     title: () => t('Preview'),
-    action: () => app.modal.open(ModalPreview, {adapter: app.fs.adapter, item: selectedItems.value[0]}),
+    action: () => app.modal.open(ModalPreview, { adapter: app.fs.adapter, item: selectedItems.value[0] }),
   },
   open: {
     title: () => t('Open'),
@@ -130,18 +129,34 @@ const menuItems = {
   archive: {
     key: FEATURES.ARCHIVE,
     title: () => t('Archive'),
-    action: () => app.modal.open(ModalArchive, {items: selectedItems}),
+    action: () => app.modal.open(ModalArchive, { items: selectedItems }),
   },
   unarchive: {
     key: FEATURES.UNARCHIVE,
     title: () => t('Unarchive'),
-    action: () => app.modal.open(ModalUnarchive, {items: selectedItems}),
+    action: () => app.modal.open(ModalUnarchive, { items: selectedItems }),
   },
   rename: {
     key: FEATURES.RENAME,
     title: () => t('Rename'),
-    action: () => app.modal.open(ModalRename, {items: selectedItems}),
-  }
+    action: () => app.modal.open(ModalRename, { items: selectedItems }),
+  },
+  setAllOnlyRead: {
+    key: FEATURES.SETALLONLY,
+    title: () => "设置只读/取消",
+    action: () => {
+      app.onlyReadFileStore.appendItems(selectedItems.value.map(item => {
+        return {
+          path: item.path,
+          type: item.type,
+          name: item.name,
+          time: Date.now(),
+        };
+      }));
+      app.emitter.emit('vf-fetch', { params: { q: 'index', adapter: app.fs.adapter, path: app.fs.data.dirname } });
+      app.onlyReadFileStore.save();
+    }
+  },
 };
 
 const run = (item) => {
@@ -150,11 +165,23 @@ const run = (item) => {
 };
 
 
-app.emitter.on('vf-search-query', ({newQuery}) => {
+app.emitter.on('vf-search-query', ({ newQuery }) => {
   searchQuery.value = newQuery;
 });
 
-app.emitter.on('vf-contextmenu-show', ({event, items, target = null}) => {
+const pushMenuItemToContext = (menus, targetList, menuItem) => {
+  if (targetList.some(item => item.onlyRead)) {
+    return;
+  }
+  if (selectedItems.value.some(item => item.onlyRead)) {
+    return;
+  }
+  menus.push(menuItem);
+};
+
+
+
+app.emitter.on('vf-contextmenu-show', ({ event, items, target = null }) => {
   context.items = [];
 
   if (searchQuery.value) {
@@ -173,13 +200,15 @@ app.emitter.on('vf-contextmenu-show', ({event, items, target = null}) => {
     // console.log('no files selected');
   } else if (items.length > 1 && items.some(el => el.path === target.path)) {
     context.items.push(menuItems.refresh);
-    context.items.push(menuItems.archive);
-    context.items.push(menuItems.delete);
+    // context.items.push(menuItems.archive);
+    pushMenuItemToContext(context.items, [target], menuItems.delete);
+    context.items.push(menuItems.setAllOnlyRead);
     app.emitter.emit('vf-context-selected', items);
     // console.log(items.length + ' selected (more than 1 item.)');
   } else {
     if (target.type === 'dir') {
       context.items.push(menuItems.open);
+      context.items.push(menuItems.setAllOnlyRead);
       if (app.pinnedFolders.findIndex((item) => item.path === target.path) !== -1) {
         context.items.push(menuItems.unpinFolder);
       } else {
@@ -188,15 +217,16 @@ app.emitter.on('vf-contextmenu-show', ({event, items, target = null}) => {
     } else {
       context.items.push(menuItems.preview);
       context.items.push(menuItems.download);
+      context.items.push(menuItems.setAllOnlyRead);
     }
-    context.items.push(menuItems.rename);
+    pushMenuItemToContext(context.items, [target], menuItems.rename);
 
-    if (target.mime_type === 'application/zip') {
-      context.items.push(menuItems.unarchive);
-    } else {
-      context.items.push(menuItems.archive);
-    }
-    context.items.push(menuItems.delete);
+    // if (target.mime_type === 'application/zip') {
+    //   context.items.push(menuItems.unarchive);
+    // } else {
+    //   context.items.push(menuItems.archive);
+    // }
+    pushMenuItemToContext(context.items, [target], menuItems.delete);
     app.emitter.emit('vf-context-selected', [target]);
     // console.log(target.type + ' is selected');
   }

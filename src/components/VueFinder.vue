@@ -1,35 +1,31 @@
 <template>
   <div class="vuefinder" ref="root" tabindex="0">
     <div :class="app.theme.actualValue">
-      <div
-        :class="app.fullScreen ? 'vuefinder__main__fixed' : 'vuefinder__main__relative'"
-        :style="!app.fullScreen ? 'max-height: ' + maxHeight : ''"
-        class="vuefinder__main__container"
-        @mousedown="app.emitter.emit('vf-contextmenu-hide')"
-        @touchstart="app.emitter.emit('vf-contextmenu-hide')"
-      >
-        <Toolbar/>
-        <Breadcrumb/>
+      <div :class="app.fullScreen ? 'vuefinder__main__fixed' : 'vuefinder__main__relative'"
+        :style="!app.fullScreen ? 'max-height: ' + maxHeight : ''" class="vuefinder__main__container"
+        @mousedown="app.emitter.emit('vf-contextmenu-hide')" @touchstart="app.emitter.emit('vf-contextmenu-hide')">
+        <Toolbar />
+        <Breadcrumb />
         <div class="vuefinder__main__content">
-          <TreeView/>
-          <Explorer/>
+          <TreeView />
+          <Explorer />
         </div>
-        <Statusbar/>
+        <Statusbar />
       </div>
 
       <Transition name="fade">
-        <Component v-if="app.modal.visible" :is="app.modal.type"/>
+        <Component v-if="app.modal.visible" :is="app.modal.type" />
       </Transition>
 
-      <ContextMenu/>
+      <ContextMenu />
     </div>
   </div>
 </template>
 
 <script setup>
-import {inject, onMounted, provide, ref} from 'vue';
+import { inject, onMounted, provide, ref } from 'vue';
 import ServiceContainer from "../ServiceContainer.js";
-import {useHotkeyActions} from "../composables/useHotkeyActions.js";
+import { useHotkeyActions } from "../composables/useHotkeyActions.js";
 
 import Toolbar from '../components/Toolbar.vue';
 import Breadcrumb from '../components/Breadcrumb.vue';
@@ -78,6 +74,10 @@ const props = defineProps({
     type: String,
     default: '600px'
   },
+  minHeight: {
+    type: String,
+    default: '300px'
+  },
   maxFileSize: {
     type: String,
     default: '10mb'
@@ -117,7 +117,7 @@ const props = defineProps({
 // the object is passed to all components as props
 const app = ServiceContainer(props, inject('VueFinderOptions'));
 provide('ServiceContainer', app);
-const {setStore} = app.storage;
+const { setStore } = app.storage;
 
 //  Define root element
 const root = ref(null);
@@ -129,6 +129,10 @@ const ds = app.dragSelect;
 useHotkeyActions(app);
 
 const updateItems = (data) => {
+  data.files = data.files.map(item => {
+    item.onlyRead = app.onlyReadFileStore.hasItem(item.path);
+    return item;
+  });
   Object.assign(app.fs.data, data);
   ds.clearSelection();
   ds.refreshSelection();
@@ -142,7 +146,7 @@ app.emitter.on('vf-fetch-abort', () => {
 });
 
 // Fetch data
-app.emitter.on('vf-fetch', ({params, body = null, onSuccess = null, onError = null, noCloseModal = false}) => {
+app.emitter.on('vf-fetch', ({ params, body = null, onSuccess = null, onError = null, noCloseModal = false }) => {
   if (['index', 'search'].includes(params.q)) {
     if (controller) {
       controller.abort();
@@ -183,6 +187,13 @@ app.emitter.on('vf-fetch', ({params, body = null, onSuccess = null, onError = nu
   });
 });
 
+const initMinHeight = () => {
+  if (props.minHeight == "0" || !root.value) {
+    return;
+  }
+  root.value.querySelectorAll(".vuefinder__main__container")[0].style.height = props.minHeight;
+};
+
 // fetch initial data
 onMounted(() => {
   // app.fs.adapter can be null at first, until we get the adapter list it will be the first one from response
@@ -198,13 +209,18 @@ onMounted(() => {
     };
   }
 
-  app.emitter.emit('vf-fetch', {params: {q: 'index', adapter: app.fs.adapter, ...pathExists}});
+  app.emitter.emit('vf-fetch', { params: { q: 'index', adapter: app.fs.adapter, ...pathExists } });
 
   // Emit select event
   ds.onSelect((items) => {
     emit('select', items);
   });
 
+  initMinHeight();
 });
+
+defineExpose({
+  app: app,
+})
 
 </script>
