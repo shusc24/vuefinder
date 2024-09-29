@@ -6,6 +6,8 @@
         @mousedown="app.emitter.emit('vf-contextmenu-hide')" @touchstart="app.emitter.emit('vf-contextmenu-hide')">
         <template v-if="!simple">
           <Toolbar />
+        </template>
+        <template v-if="showPath">
           <Breadcrumb />
         </template>
         <div class="vuefinder__main__content">
@@ -103,6 +105,10 @@ const props = defineProps({
     default: true
   },
   simple: {
+    type: Boolean,
+    default: true,
+  },
+  showPath: {
     type: Boolean,
     default: true,
   },
