@@ -1,43 +1,37 @@
 <template>
   <div
-    :style="{opacity: ds.isDraggingRef.value && ds.getSelection().find((el) => $el === el) ? '0.5 !important' : ''}"
-    :class="['vuefinder__item', 'vf-item-' + ds.explorerId]"
-    :data-type="item.type"
-    :key="item.path"
-    :data-item="JSON.stringify(item)"
-    :data-index="index"
-    v-draggable="item"
-    @dblclick="openItem(item)"
-    @touchstart="delayedOpenItem($event)"
-    @touchend="clearTimeOut()"
-    @contextmenu.prevent="app.emitter.emit('vf-contextmenu-show', { event: $event, items: ds.getSelected(), target: item })"
-  >
-    <slot/>
-    <PinSVG class="vuefinder__item--pinned" v-if="app.pinnedFolders.find(pin => pin.path === item.path)"/>
+    :style="{ opacity: ds.isDraggingRef.value && ds.getSelection().find((el) => $el === el) ? '0.5 !important' : '' }"
+    :class="['vuefinder__item', 'vf-item-' + ds.explorerId]" :data-type="item.type" :key="item.path"
+    :data-item="JSON.stringify(item)" :data-index="index" v-draggable="item" @dblclick="openItem(item)"
+    @touchstart="delayedOpenItem($event)" @touchend="clearTimeOut()"
+    @contextmenu.prevent="app.emitter.emit('vf-contextmenu-show', { event: $event, items: ds.getSelected(), target: item })">
+    <slot />
+    <PinSVG class="vuefinder__item--pinned" v-if="app.pinnedFolders.find(pin => pin.path === item.path)" />
   </div>
 </template>
 
 <script setup>
-import {defineProps, inject} from 'vue';
-import ModalPreview from "./modals/ModalPreview.vue";
+import { defineProps, inject } from 'vue';
 import ModalMove from "./modals/ModalMove.vue";
 import PinSVG from "./icons/pin.svg";
 
 const app = inject('ServiceContainer');
 const ds = app.dragSelect;
+const emits = defineEmits(['open'])
 
 const props = defineProps({
-  item: {type: Object},
-  index: {type: Number},
-  dragImage: {type: Object}
+  item: { type: Object },
+  index: { type: Number },
+  dragImage: { type: Object }
 })
 
 const openItem = (item) => {
   if (item.type === 'dir') {
     app.emitter.emit('vf-search-exit');
-    app.emitter.emit('vf-fetch', {params: {q: 'index', adapter: app.fs.adapter, path: item.path}});
+    app.emitter.emit('vf-fetch', { params: { q: 'index', adapter: app.fs.adapter, path: item.path } });
   } else {
-    app.modal.open(ModalPreview, {adapter: app.fs.adapter, item})
+    // app.modal.open(ModalPreview, { adapter: app.fs.adapter, item })
+    app.emitter.emit('openfile', item)
   }
 };
 
@@ -81,7 +75,7 @@ const handleDropZone = (e, item) => {
     return;
   }
 
-  app.modal.open(ModalMove, {items: {from: draggedItems, to: item}})
+  app.modal.open(ModalMove, { items: { from: draggedItems, to: item } })
 };
 
 const handleDragOver = (e, item) => {
@@ -105,15 +99,15 @@ const clearTimeOut = () => {
 }
 
 const delayedOpenItem = ($event) => {
-    if(!tappedTwice) {
-        tappedTwice = true; 
-        doubleTapTimeOut = setTimeout(() => tappedTwice = false, 300)
-    } else {
-        tappedTwice = false; 
-        openItem(props.item);
-        clearTimeout(touchTimeOut);
-        return false;
-    }
+  if (!tappedTwice) {
+    tappedTwice = true;
+    doubleTapTimeOut = setTimeout(() => tappedTwice = false, 300)
+  } else {
+    tappedTwice = false;
+    openItem(props.item);
+    clearTimeout(touchTimeOut);
+    return false;
+  }
   touchTimeOut = setTimeout(() => {
     const cmEvent = new MouseEvent("contextmenu", {
       bubbles: true,

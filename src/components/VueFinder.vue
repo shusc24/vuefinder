@@ -41,7 +41,7 @@ import Statusbar from '../components/Statusbar.vue';
 import TreeView from '../components/TreeView.vue';
 
 
-const emit = defineEmits(['select'])
+const emit = defineEmits(['select', 'openFile'])
 
 const props = defineProps({
   id: {
@@ -208,6 +208,12 @@ const initMinHeight = () => {
   root.value.querySelectorAll(".vuefinder__main__container")[0].style.height = props.minHeight;
 };
 
+const initGlobalEvents = () => {
+  app.emitter.on("openfile", (item) => {
+    emit('openFile', item);
+  })
+};
+
 // fetch initial data
 onMounted(() => {
   // app.fs.adapter can be null at first, until we get the adapter list it will be the first one from response
@@ -231,6 +237,8 @@ onMounted(() => {
   });
 
   initMinHeight();
+
+  initGlobalEvents();
 });
 
 defineExpose({
