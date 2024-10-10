@@ -7,7 +7,7 @@ import {
   ClickScrollPlugin,
 } from "overlayscrollbars";
 
-export default function () {
+export default function (onDragEnd) {
   let dragSelectInstance;
   const area = ref(null);
   const explorerId = Math.floor(Math.random() * 2 ** 32);
@@ -22,6 +22,7 @@ export default function () {
   const osInstance = ref(null);
   const scrollBar = ref(null);
   const scrollBarContainer = ref(null);
+  const toElement = ref(null);
 
   const resizeObserver = ref(null);
 
@@ -55,8 +56,16 @@ export default function () {
 
     // Immediately update the selection when dragging ends.
     document.addEventListener("dragleave", (e) => {
+      toElement.value = e.target;
+
       if (!e.buttons && isDraggingRef.value) {
         isDraggingRef.value = false;
+      }
+    });
+
+    document.addEventListener("dragend", (e) => {
+      if (onDragEnd) {
+        onDragEnd(toElement.value);
       }
     });
   }

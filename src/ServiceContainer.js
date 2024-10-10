@@ -36,7 +36,9 @@ export default (props, options) => {
 
   const path = persist ? storage.getStore("path", props.path) : props.path;
 
-  const dragSelect = useDragSelect();
+  const dragSelect = useDragSelect((e) => {
+    emitter.emit("file-drag-end", e);
+  });
 
   return reactive({
     /**
