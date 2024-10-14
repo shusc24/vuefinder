@@ -43,6 +43,10 @@ export default function useReadOnlyFile() {
   };
 
   const hasItem = (path) => {
+    if (path.indexOf("自动下单") !== -1) {
+      return true;
+    }
+
     let findIndex = storage.items.findIndex((i) => {
       return path.indexOf(i.path) === 0;
     });

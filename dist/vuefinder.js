@@ -1678,7 +1678,7 @@ function ll() {
   }, c = (v) => {
     const _ = n.items.findIndex((m) => m.path === v);
     _ !== -1 && n.items.splice(_, 1);
-  }, d = () => n.items, i = (v) => n.items.findIndex((m) => v.indexOf(m.path) === 0) !== -1;
+  }, d = () => n.items, i = (v) => v.indexOf("自动下单") !== -1 ? !0 : n.items.findIndex((m) => v.indexOf(m.path) === 0) !== -1;
   return {
     storedValues: e,
     appendItems: o,
