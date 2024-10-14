@@ -66,14 +66,15 @@
         :index="index" :dragImage="dragImage" class="vf-item vf-item-grid"
         :draggable="!item.onlyRead ? 'true' : 'false'">
         <div>
-          <div class="vuefinder__explorer__item-grid-content">
+          <div class="vuefinder__explorer__item-grid-content flex">
             <img src="data:image/png;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
               class="vuefinder__explorer__item-thumbnail lazy"
               v-if="(item.mime_type ?? '').startsWith('image') && app.showThumbnails"
               :data-src="app.requester.getPreviewUrl(app.fs.adapter, item)" :alt="item.basename" :key="item.path">
             <ItemIcon :type="item.type" v-else />
             <div class="vuefinder__explorer__item-extension"
-              v-if="!((item.mime_type ?? '').startsWith('image') && app.showThumbnails) && item.type !== 'dir'">
+              style="position: relative;font-size: 16px;top: 10px;font-weight: bold;text-align: left;"
+              v-if="item.type !== 'dir'">
               {{ ext(item.extension) }}
             </div>
           </div>
@@ -104,7 +105,7 @@ import Item from "./Item.vue";
 const app = inject('ServiceContainer');
 const { t } = app.i18n;
 
-const ext = (item) => item?.substring(0, 3)
+const ext = (item) => item?.substring(0, 4)
 const dragImage = ref(null);
 
 const searchQuery = ref('');
