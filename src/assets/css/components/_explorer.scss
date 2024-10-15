@@ -75,6 +75,10 @@
   @apply absolute md:block top-1/2 w-full text-center text-neutral-500;
 }
 
+.vuefinder .vuefinder__explorer__item-hasReader {
+  @apply absolute md:block top-1/2  text-center text-neutral-500;
+}
+
 .vuefinder__explorer__item-title {
   @apply break-all;
 }

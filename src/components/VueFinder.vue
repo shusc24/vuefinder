@@ -41,7 +41,7 @@ import Statusbar from '../components/Statusbar.vue';
 import TreeView from '../components/TreeView.vue';
 
 
-const emit = defineEmits(['select', 'openFile', 'fileDragEnd']);
+const emit = defineEmits(['select', 'openFile', 'fileDragEnd', "deleteFile"]);
 
 const props = defineProps({
   id: {
@@ -215,6 +215,10 @@ const initGlobalEvents = () => {
 
   app.emitter.on("file-drag-end", (e) => {
     emit('fileDragEnd', e);
+  })
+
+  app.emitter.on("delete-file", (items) => {
+    emit('deleteFile', items);
   })
 };
 

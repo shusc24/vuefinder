@@ -79,7 +79,8 @@ const menuItems = {
     key: FEATURES.DELETE,
     title: () => t('Delete'),
     action: () => {
-      app.modal.open(ModalDelete, { items: selectedItems });
+      // app.modal.open(ModalDelete, { items: selectedItems });
+      app.emitter.emit('delete-file', selectedItems)
     },
   },
   refresh: {

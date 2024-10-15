@@ -66,12 +66,19 @@
         :index="index" :dragImage="dragImage" class="vf-item vf-item-grid"
         :draggable="!item.onlyRead ? 'true' : 'false'">
         <div>
-          <div class="vuefinder__explorer__item-grid-content flex">
+          <div class="vuefinder__explorer__item-grid-content flex" style="justify-content: center;align-items: center;">
             <img src="data:image/png;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
               class="vuefinder__explorer__item-thumbnail lazy"
               v-if="(item.mime_type ?? '').startsWith('image') && app.showThumbnails"
               :data-src="app.requester.getPreviewUrl(app.fs.adapter, item)" :alt="item.basename" :key="item.path">
             <ItemIcon :type="item.type" v-else />
+
+
+            <span class="vuefinder__explorer__item-hasReader " v-if="item.type !== 'dir' && item.hasReader"
+              style="position: absolute;font-size: 10px;top: 0px;right: 0;font-weight: bold;">
+              已打开
+            </span>
+
             <div class="vuefinder__explorer__item-extension"
               style="position: relative;font-size: 16px;top: 10px;font-weight: bold;text-align: left;"
               v-if="item.type !== 'dir'">

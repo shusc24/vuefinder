@@ -5,14 +5,14 @@
     </div>
 
     <div style="font-weight: bold;padding: 10px">Inline select button example</div>
-    <vue-finder id='my_vuefinder' ref="finder_1" :request="request" :max-file-size="maxFileSize" :features="features"
-      :select-button="handleSelectButton" />
+    <vue-finder id='my_vuefinder' @deleteFile="onDeleteFiles" ref="finder_1" :request="request"
+      :max-file-size="maxFileSize" :features="features" :select-button="handleSelectButton" />
 
     <br>
     <br>
     <div style="font-weight: bold;padding: 10px">External select example</div>
-    <vue-finder :simple="false" id='my_vuefinder2' :request="request" :max-file-size="maxFileSize" :features="features"
-      @select="handleSelect" />
+    <vue-finder :simple="false" @deleteFile="onDeleteFiles" id='my_vuefinder2' :request="request"
+      :max-file-size="maxFileSize" :features="features" @select="handleSelect" />
 
     <button class="btn" @click="handleButton" :disabled="!selectedFiles.length">Show Selected ({{ selectedFiles.length
       ?? 0 }} selected)</button>
@@ -79,6 +79,10 @@ const handleSelect = (selection) => {
 
 const handleButton = () => {
   console.log(selectedFiles.value)
+}
+
+const onDeleteFiles = (files) => {
+  console.log('onDeleteFiles', files);
 }
 
 const handleSelectButton = {
