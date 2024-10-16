@@ -1,5 +1,5 @@
 <template>
-  <div class="vuefinder__breadcrumb__container">
+  <div class="vuefinder__breadcrumb__container" style="padding: 1px;">
     <template v-if="false">
       <span :title="t('Toggle Tree View')">
         <ListTreeSVG @click="toggleTreeView" class="vuefinder__breadcrumb__toggle-tree"
@@ -20,7 +20,7 @@
       <CloseSVG @click="app.emitter.emit('vf-fetch-abort')" />
     </span>
 
-    <div v-show="!app.fs.searchMode" @click.self="enterSearchMode"
+    <div v-show="!app.fs.searchMode && false" @click.self="enterSearchMode"
       class="group vuefinder__breadcrumb__search-container">
       <div>
         <HomeSVG @dragover="handleDragOver($event)" @dragleave="handleDragLeave($event)"
@@ -55,7 +55,7 @@
 
       <LoadingSVG v-if="app.fs.loading" />
     </div>
-    <div v-show="app.fs.searchMode" class="vuefinder__breadcrumb__search-mode">
+    <div v-show="app.fs.searchMode && false" class="vuefinder__breadcrumb__search-mode">
       <div>
         <SearchSVG />
       </div>
