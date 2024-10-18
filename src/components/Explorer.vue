@@ -75,7 +75,7 @@
 
 
             <span class="vuefinder__explorer__item-hasReader " v-if="item.type !== 'dir' && item.hasReader"
-              style="position: absolute;font-size: 10px;top: 0px;right: 0;font-weight: bold;">
+              style="position: absolute;font-size: 10px;top: 0px;right: 0;font-weight: bold;color: red">
               已打开
             </span>
 
