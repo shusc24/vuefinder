@@ -1,10 +1,10 @@
 <template>
   <div
     :style="{ opacity: ds.isDraggingRef.value && ds.getSelection().find((el) => $el === el) ? '0.5 !important' : '' }"
-    :class="['vuefinder__item', 'vf-item-' + ds.explorerId]" :data-type="item.type" :key="item.path"
-    :data-item="JSON.stringify(item)" :data-index="index" v-draggable="item" @dblclick="openItem(item)"
-    @touchstart="delayedOpenItem($event)" @touchend="clearTimeOut()"
-    @contextmenu.prevent="app.emitter.emit('vf-contextmenu-show', { event: $event, items: ds.getSelected(), target: item })">
+    :class="['vuefinder__item', 'vf-item-' + ds.explorerId, disabled ? 'vuefinder__item--disabled' : '']"
+    :data-type="item.type" :key="item.path" :data-item="JSON.stringify(item)" :data-index="index" v-draggable="item"
+    @dblclick="openItem(item)" @touchstart="delayedOpenItem($event)" @touchend="clearTimeOut()"
+    @contextmenu.prevent="onContextMenu($event, item)">
     <slot />
     <PinSVG class="vuefinder__item--pinned" v-if="app.pinnedFolders.find(pin => pin.path === item.path)" />
   </div>
@@ -22,10 +22,14 @@ const emits = defineEmits(['open'])
 const props = defineProps({
   item: { type: Object },
   index: { type: Number },
-  dragImage: { type: Object }
+  dragImage: { type: Object },
+  disabled: { type: Boolean, default: false },
 })
 
 const openItem = (item) => {
+  if (props.disabled) {
+    return
+  }
   if (item.type === 'dir') {
     app.emitter.emit('vf-search-exit');
     app.emitter.emit('vf-fetch', { params: { q: 'index', adapter: app.fs.adapter, path: item.path } });
@@ -33,6 +37,14 @@ const openItem = (item) => {
     // app.modal.open(ModalPreview, { adapter: app.fs.adapter, item })
     app.emitter.emit('openfile', item)
   }
+};
+
+const onContextMenu = (e,) => {
+  console.log(props.item)
+  if (props.disabled) {
+    return;
+  }
+  app.emitter.emit('vf-contextmenu-show', { event: e, items: ds.getSelected(), target: item })
 };
 
 const vDraggable = {

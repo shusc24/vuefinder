@@ -63,8 +63,8 @@
       </Item>
       <!-- Grid View -->
       <Item v-if="app.view === 'grid' && !searchQuery.length" v-for="(item, index) in getItems(false)" :item="item"
-        :index="index" :dragImage="dragImage" class="vf-item vf-item-grid"
-        :draggable="!item.onlyRead ? 'true' : 'false'">
+        :index="index" :dragImage="dragImage" class="vf-item vf-item-grid" :disabled="!item.canopt"
+        :draggable="(!item.onlyRead && item.canopt) ? 'true' : 'false'">
         <div>
           <div class="vuefinder__explorer__item-grid-content flex" style="justify-content: center;align-items: center;">
             <img src="data:image/png;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
@@ -76,7 +76,7 @@
 
             <span class="vuefinder__explorer__item-hasReader " v-if="item.type !== 'dir' && item.hasReader"
               style="position: absolute;font-size: 10px;top: 0px;right: 0;font-weight: bold;color: red">
-              已打开
+              打开过
             </span>
 
             <div class="vuefinder__explorer__item-extension"
