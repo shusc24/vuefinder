@@ -39,7 +39,7 @@ const openItem = (item) => {
   }
 };
 
-const onContextMenu = (e,) => {
+const onContextMenu = (e, item) => {
   console.log(props.item)
   if (props.disabled) {
     return;
