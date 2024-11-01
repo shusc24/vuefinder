@@ -2585,7 +2585,7 @@ const So = { render: Ra }, Ba = { class: "vuefinder__new-file-modal__content" },
     }));
   }
 };
-function $s(t, e = 14) {
+function $s(t, e = 10) {
   let n = `((?=([\\w\\W]{0,${e}}))([\\w\\W]{${e + 1},})([\\w\\W]{8,}))`;
   return t.replace(new RegExp(n), "$2..$4");
 }

@@ -1,5 +1,7 @@
-export default function (title, length = 14) {
-    let pattern = `((?=([\\w\\W]{0,${length}}))([\\w\\W]{${length+1},})([\\w\\W]{8,}))`;
+export default function (title, length = 10) {
+  let pattern = `((?=([\\w\\W]{0,${length}}))([\\w\\W]{${
+    length + 1
+  },})([\\w\\W]{8,}))`;
 
-    return title.replace(new RegExp(pattern), '$2..$4');
-};
+  return title.replace(new RegExp(pattern), "$2..$4");
+}
