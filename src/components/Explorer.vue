@@ -87,8 +87,13 @@
           </div>
 
           <span class="vuefinder__explorer__item-title break-all" v-if="item.onlyRead">{{ title_shorten('【只读】' +
-            item.basename) }}</span>
+            item.basename) }} </span>
           <span class="vuefinder__explorer__item-title break-all" v-else>{{ title_shorten(item.basename) }}</span>
+
+          <div v-if="item.type !== 'dir'" @click.stop="handleAddProcessImageClick(item)" class="vuefinder__explorer__item-add-process-image vuefinder__btn mb-[5px]"
+            style="margin-left: 10px;margin-right: 10px;">
+            加工艺图
+          </div>
         </div>
       </Item>
     </div>
@@ -108,6 +113,7 @@ import ItemIcon from "./ItemIcon.vue";
 import DragItem from "./DragItem.vue";
 import Item from "./Item.vue";
 
+const emit = defineEmits(["onAddProcessImageClick"]);
 
 const app = inject('ServiceContainer');
 const { t } = app.i18n;
@@ -187,6 +193,9 @@ const sortBy = (column) => {
   }
 };
 
+const handleAddProcessImageClick = (item) => {
+  emit("onAddProcessImageClick", item);
+};
 
 onMounted(() => {
   vfLazyLoad = new LazyLoad(ds.area.value);

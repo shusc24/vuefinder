@@ -80,7 +80,8 @@
 }
 
 .vuefinder__explorer__item-title {
-  @apply break-all;
+  @apply break-all h-[2.5rem];
+  display: inline-block;
 }
 
 .vf-explorer-selected {
@@ -92,7 +93,12 @@
 }
 
 .vf-item-grid {
-  @apply border border-transparent hover:bg-neutral-50 m-1 dark:hover:bg-gray-700 inline-flex w-[5.5rem] h-20 md:w-24 text-center justify-center select-none;
+  @apply border border-transparent hover:bg-neutral-50 m-1 dark:hover:bg-gray-700 inline-flex w-[5.5rem] h-[7rem] md:w-24 text-center justify-center select-none;
+}
+
+.vuefinder__btn {
+  @apply bg-blue-500 text-white px-2 py-1 rounded;
+  font-size: 12px;
 }
 
 .vf-explorer-scrollbar-container {
