@@ -3714,6 +3714,12 @@ const $o = { render: Zc }, ed = ["data-type", "data-item", "data-index"], En = {
   class: "vuefinder__explorer__item-title break-all"
 }, bd = ["onClick"], wd = {
   __name: "Explorer",
+  props: {
+    showProcess: {
+      type: Boolean,
+      default: !1
+    }
+  },
   emits: ["onAddProcessImageClick"],
   setup(t, { emit: e }) {
     const n = e, s = le("ServiceContainer"), { t: o } = s.i18n, a = (h) => h == null ? void 0 : h.substring(0, 4), i = O(null), d = O(""), c = s.dragSelect;
@@ -3889,7 +3895,7 @@ const $o = { render: Zc }, ed = ["data-type", "data-item", "data-index"], En = {
                 b.type !== "dir" ? (f(), g("div", pd, k(a(b.extension)), 1)) : F("", !0)
               ]),
               b.onlyRead ? (f(), g("span", hd, k(l($s)("【只读】" + b.basename)), 1)) : (f(), g("span", gd, k(l($s)(b.basename)), 1)),
-              b.type !== "dir" ? (f(), g("div", {
+              b.type !== "dir" && t.showProcess ? (f(), g("div", {
                 key: 2,
                 onClick: kt(($) => y(b), ["stop"]),
                 class: "vuefinder__explorer__item-add-process-image vuefinder__btn mb-[5px]",
@@ -5005,6 +5011,11 @@ const Hu = { class: "vuefinder__folder-loader-indicator" }, Nu = {
           ...t
         };
       }
+    },
+    // 显示是否显示工艺
+    showProcess: {
+      type: Boolean,
+      default: !1
     }
   },
   emits: ["select", "openFile", "fileDragEnd", "deleteFile", "onAddProcessImageClick"],
@@ -5078,7 +5089,10 @@ const Hu = { class: "vuefinder__folder-loader-indicator" }, Nu = {
           t.showPath ? (f(), q(Lc, { key: 1 })) : F("", !0),
           r("div", dv, [
             j(cv),
-            j(wd, { onOnAddProcessImageClick: y })
+            j(wd, {
+              showProcess: t.showProcess,
+              onOnAddProcessImageClick: y
+            }, null, 8, ["showProcess"])
           ]),
           t.simple ? F("", !0) : (f(), q(Tu, { key: 2 }))
         ], 38),

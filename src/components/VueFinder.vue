@@ -12,7 +12,7 @@
         </template>
         <div class="vuefinder__main__content">
           <TreeView />
-          <Explorer @onAddProcessImageClick="handleAddProcessImageClick" />
+          <Explorer :showProcess="showProcess" @onAddProcessImageClick="handleAddProcessImageClick" />
         </div>
         <template v-if="!simple">
           <Statusbar />
@@ -125,6 +125,11 @@ const props = defineProps({
         ...rawProps,
       }
     },
+  },
+  // 显示是否显示工艺
+  showProcess: {
+    type: Boolean,
+    default: false,
   },
 });
 

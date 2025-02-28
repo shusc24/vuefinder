@@ -89,8 +89,8 @@
           <span class="vuefinder__explorer__item-title break-all" v-if="item.onlyRead">{{ title_shorten('【只读】' +
             item.basename) }} </span>
           <span class="vuefinder__explorer__item-title break-all" v-else>{{ title_shorten(item.basename) }}</span>
-
-          <div v-if="item.type !== 'dir'" @click.stop="handleAddProcessImageClick(item)" class="vuefinder__explorer__item-add-process-image vuefinder__btn mb-[5px]"
+          <!-- 显示工艺图 需要被选中-->
+          <div v-if="item.type !== 'dir' && showProcess" @click.stop="handleAddProcessImageClick(item)" class="vuefinder__explorer__item-add-process-image vuefinder__btn mb-[5px]"
             style="margin-left: 10px;margin-right: 10px;">
             加工艺图
           </div>
@@ -123,6 +123,13 @@ const dragImage = ref(null);
 
 const searchQuery = ref('');
 const ds = app.dragSelect;
+
+const props = defineProps({
+  showProcess: {
+    type: Boolean,
+    default: false,
+  },
+});
 
 
 /** @type {import('vanilla-lazyload').ILazyLoadInstance} */
