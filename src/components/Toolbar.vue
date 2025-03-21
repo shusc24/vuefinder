@@ -48,7 +48,7 @@
     </div>
 
     <div class="vuefinder__toolbar__controls">
-      <div v-if="app.features.includes(FEATURES.FULL_SCREEN)" @click="toggleFullScreen" class="mx-1.5"
+      <div v-if="app.features.includes(FEATURES.FULL_SCREEN) && false" @click="toggleFullScreen" class="mx-1.5"
         :title="t('Toggle Full Screen')">
         <MinimizeSVG v-if="app.fullScreen" />
         <FullscreenSVG v-else />

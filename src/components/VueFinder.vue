@@ -4,7 +4,7 @@
       <div :class="app.fullScreen ? 'vuefinder__main__fixed' : 'vuefinder__main__relative'"
         :style="!app.fullScreen ? 'max-height: ' + maxHeight : ''" class="vuefinder__main__container"
         @mousedown="app.emitter.emit('vf-contextmenu-hide')" @touchstart="app.emitter.emit('vf-contextmenu-hide')">
-        <template v-if="!simple">
+        <template v-if="!simple || showToolBar">
           <Toolbar />
         </template>
         <template v-if="showPath">
@@ -107,6 +107,10 @@ const props = defineProps({
   simple: {
     type: Boolean,
     default: true,
+  },
+  showToolBar: {
+    type: Boolean,
+    default: false, 
   },
   showPath: {
     type: Boolean,
