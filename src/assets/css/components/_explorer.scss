@@ -63,6 +63,10 @@
   @apply col-span-3 overflow-ellipsis overflow-hidden whitespace-nowrap px-1 md:px-3;
 }
 
+.vuefinder__explorer__item-opt {
+  @apply col-span-3 overflow-ellipsis overflow-hidden whitespace-nowrap px-1 md:px-3;
+}
+
 .vuefinder__explorer__item-grid-content {
   @apply relative;
 }

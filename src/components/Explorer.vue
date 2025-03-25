@@ -53,8 +53,8 @@
         <div class="vuefinder__explorer__item-list-content">
           <div class="vuefinder__explorer__item-list-name">
             <ItemIcon :type="item.type" :small="app.compactListView" />
-            <span style="color: red;" v-if="item.type !== 'dir' && item.hasReader">[打开过]</span>
-            <span class="vuefinder__explorer__item-name" v-if="item.onlyRead"> [只读]{{ item.basename }} </span>
+            <span style="color: red;" v-if="item.type !== 'dir' && item.hasReader">[打开]</span>
+            <span class="vuefinder__explorer__item-name" v-if="item.onlyRead"> [读]{{ item.basename }} </span>
             <span class="vuefinder__explorer__item-name" v-if="!item.onlyRead">{{ item.basename }}</span>
           </div>
           <div class="vuefinder__explorer__item-size">{{ item.file_size ? app.filesize(item.file_size) : '' }}</div>
@@ -92,7 +92,7 @@
             item.basename) }} </span>
           <span class="vuefinder__explorer__item-title break-all" v-else>{{ title_shorten(item.basename) }}</span>
           <!-- 显示工艺图 需要被选中-->
-          <div v-if="item.type !== 'dir' && showProcess" @click.stop="handleAddProcessImageClick(item)"
+          <div v-if="showProcess" @click.stop="handleAddProcessImageClick(item)"
             class="vuefinder__explorer__item-add-process-image vuefinder__btn mb-[5px]"
             style="margin-left: 10px;margin-right: 10px;">
             加工艺图

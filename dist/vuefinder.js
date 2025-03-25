@@ -3842,8 +3842,8 @@ const $o = { render: jc }, Wc = ["data-type", "data-item", "data-index"], En = {
                   type: g.type,
                   small: l(s).compactListView
                 }, null, 8, ["type", "small"]),
-                g.type !== "dir" && g.hasReader ? (f(), b("span", sd, "[打开过]")) : F("", !0),
-                g.onlyRead ? (f(), b("span", od, " [只读]" + k(g.basename), 1)) : F("", !0),
+                g.type !== "dir" && g.hasReader ? (f(), b("span", sd, "[打开]")) : F("", !0),
+                g.onlyRead ? (f(), b("span", od, " [读]" + k(g.basename), 1)) : F("", !0),
                 g.onlyRead ? F("", !0) : (f(), b("span", rd, k(g.basename), 1))
               ]),
               r("div", ld, k(g.file_size ? l(s).filesize(g.file_size) : ""), 1),
@@ -3877,7 +3877,7 @@ const $o = { render: jc }, Wc = ["data-type", "data-item", "data-index"], En = {
                 g.type !== "dir" ? (f(), b("div", ud, k(a(g.extension)), 1)) : F("", !0)
               ]),
               g.onlyRead ? (f(), b("span", vd, k(l($s)("【只读】" + g.basename)), 1)) : (f(), b("span", fd, k(l($s)(g.basename)), 1)),
-              g.type !== "dir" && t.showProcess ? (f(), b("div", {
+              t.showProcess ? (f(), b("div", {
                 key: 2,
                 onClick: kt(($) => y(g), ["stop"]),
                 class: "vuefinder__explorer__item-add-process-image vuefinder__btn mb-[5px]",
