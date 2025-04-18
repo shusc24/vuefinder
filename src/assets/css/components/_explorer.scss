@@ -11,7 +11,7 @@
 }
 
 .vuefinder__explorer__sort-button--name {
-  @apply col-span-7;
+  @apply justify-start col-span-10;
 }
 
 .vuefinder__explorer__sort-button--size {
@@ -47,7 +47,7 @@
 }
 
 .vuefinder__explorer__item-list-name {
-  @apply flex col-span-7 items-center;
+  @apply flex col-span-10 items-center;
 }
 
 .vuefinder__explorer__item-name,

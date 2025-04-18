@@ -11,12 +11,12 @@
         {{ t('Size') }}
         <SortIcon :direction="sort.order" v-show="sort.active && sort.column === 'file_size'" />
       </div>
-      <div v-if="!searchQuery.length" @click="sortBy('last_modified')"
+      <div v-if="!searchQuery.length && false" @click="sortBy('last_modified')"
         class="vuefinder__explorer__sort-button vuefinder__explorer__sort-button--date vf-sort-button">
         {{ t('Date') }}
         <SortIcon :direction="sort.order" v-show="sort.active && sort.column === 'last_modified'" />
       </div>
-      <div v-if="searchQuery.length" @click="sortBy('path')"
+      <div v-if="searchQuery.length && false" @click="sortBy('path')"
         class="vuefinder__explorer__sort-button vuefinder__explorer__sort-button--path vf-sort-button">
         {{ t('Filepath') }}
         <SortIcon :direction="sort.order" v-show="sort.active && sort.column === 'path'" />
@@ -58,9 +58,9 @@
             <span class="vuefinder__explorer__item-name" v-if="!item.onlyRead">{{ item.basename }}</span>
           </div>
           <div class="vuefinder__explorer__item-size">{{ item.file_size ? app.filesize(item.file_size) : '' }}</div>
-          <div class="vuefinder__explorer__item-date">
+          <!-- <div class="vuefinder__explorer__item-date">
             {{ datetimestring(item.last_modified) }}
-          </div>
+          </div> -->
         </div>
       </Item>
       <!-- Grid View -->
